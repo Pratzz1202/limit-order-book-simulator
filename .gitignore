@@ -1,0 +1,25 @@
+# build artifacts
+/build/
+CMakeFiles/
+CMakeCache.txt
+*.o
+*.obj
+*.pdb
+
+# python venv & caches
+.venv/
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+*.code-workspace
+
+# generated data & plots
+data/*.csv
+data/plots/
+data/snapshots/
+
+# keep small sample inputs
+!data/sample_orders.txt
+!data/synth_orders.txt
