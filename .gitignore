@@ -1,25 +1,22 @@
-# build artifacts
+# Build artifacts
 /build/
-CMakeFiles/
-CMakeCache.txt
-*.o
-*.obj
-*.pdb
+/cmake-build-*/
+/CMakeFiles/
+/Makefile
+/CMakeCache.txt
+/*.cmake
+/*.a
+/*.o
+/*.out
+/*.exe
+/*.log
 
-# python venv & caches
-.venv/
+# IDE & OS files
+.vscode/
+.DS_Store
+.idea/
+*.swp
+
+# Python cache (for analytics scripts)
 __pycache__/
 *.pyc
-
-# IDE
-.vscode/
-*.code-workspace
-
-# generated data & plots
-data/*.csv
-data/plots/
-data/snapshots/
-
-# keep small sample inputs
-!data/sample_orders.txt
-!data/synth_orders.txt
