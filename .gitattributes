@@ -16,4 +16,5 @@ include/**              linguist-detectable=true
 
 # If you DON'T want Python to count, keep this.
 # If you DO want Python to appear (e.g., 10–20%), remove this line.
-scripts/**              linguist-vendored
+
+# scripts/**              linguist-vendored
