@@ -1,7 +1,14 @@
-# Ignore build and configuration files in language stats
+# Ignore build system and auto-generated files
 CMakeLists.txt linguist-detectable=false
 *.cmake linguist-detectable=false
 Makefile linguist-detectable=false
 *.mk linguist-detectable=false
+
+# Ignore generated directories
 build/* linguist-detectable=false
 CMakeFiles/* linguist-detectable=false
+scripts/* linguist-detectable=false
+
+# Ensure code folders count
+src/* linguist-detectable=true
+include/* linguist-detectable=true
