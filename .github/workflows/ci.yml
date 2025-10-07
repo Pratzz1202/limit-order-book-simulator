@@ -1,26 +1,55 @@
 name: ci
 on: [push, pull_request]
+
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix: { os: [ubuntu-latest, macos-latest] }  # add windows-latest if you want
+  build-linux:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install deps
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y cmake g++ python3 python3-pip
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ python3 python3-pip
+
       - name: Configure
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
       - name: Build
         run: cmake --build build -j
-      - name: Smoke run (synth 20k)
+
+      - name: Smoke run (20k events)
         run: |
+          mkdir -p data
           python3 scripts/gen_synth.py --n 20000 --out data/synth_ci.txt
           ./build/orderbook_simulator data/synth_ci.txt \
-            --trades-csv data/trades.csv --quotes-csv data/quotes.csv --latency-csv data/latency.csv
-      - name: Python checks
-        run: |
-          python3 -m pip install pandas matplotlib
-          python3 scripts/plot_spread_hist.py --no-show || true
+            --trades-csv data/trades.csv \
+            --quotes-csv data/quotes.csv \
+            --latency-csv data/latency.csv
 
+      - name: Python plots (headless)
+        env:
+          MPLBACKEND: Agg
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install pandas matplotlib
+          python3 scripts/plot_price.py --no-show
+          python3 scripts/plot_spread_hist.py --no-show
+          python3 scripts/latency_hist.py --no-show
+
+      - name: Quick report
+        run: |
+          python3 - <<'PY'
+          import pandas as pd, numpy as np
+          lat = pd.read_csv("data/latency.csv")["ns"]
+          p = lambda q: np.percentile(lat, q)
+          print("Events:", len(lat))
+          print("P50/P90/P99 (µs):", *(round(p(x)/1e3,2) for x in (50,90,99)))
+          PY
+
+      - name: Upload plots
+        uses: actions/upload-artifact@v4
+        with:
+          name: plots
+          path: data/plots/*.png
+          if-no-files-found: ignore
