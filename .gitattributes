@@ -1,0 +1,7 @@
+# Ignore build and configuration files in language stats
+CMakeLists.txt linguist-detectable=false
+*.cmake linguist-detectable=false
+Makefile linguist-detectable=false
+*.mk linguist-detectable=false
+build/* linguist-detectable=false
+CMakeFiles/* linguist-detectable=false
