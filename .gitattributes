@@ -1,14 +1,19 @@
-# Ignore build system and auto-generated files
-CMakeLists.txt linguist-detectable=false
-*.cmake linguist-detectable=false
-Makefile linguist-detectable=false
-*.mk linguist-detectable=false
+# Exclude build/generated stuff from language stats
+build/**                linguist-vendored
+**/CMakeFiles/**        linguist-vendored
+**/Makefile             linguist-vendored
+*.cmake                 linguist-vendored
+CMakeLists.txt          linguist-vendored
 
-# Ignore generated directories
-build/* linguist-detectable=false
-CMakeFiles/* linguist-detectable=false
-scripts/* linguist-detectable=false
+# Data & outputs shouldn’t count
+data/**                 linguist-vendored
+data/plots/**           linguist-vendored
+data/snapshots/**       linguist-vendored
 
-# Ensure code folders count
-src/* linguist-detectable=true
-include/* linguist-detectable=true
+# Count only actual source
+src/**                  linguist-detectable=true
+include/**              linguist-detectable=true
+
+# If you DON'T want Python to count, keep this.
+# If you DO want Python to appear (e.g., 10–20%), remove this line.
+scripts/**              linguist-vendored
