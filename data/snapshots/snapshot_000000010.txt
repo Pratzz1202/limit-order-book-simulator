@@ -1,0 +1,5 @@
+=== SNAPSHOT ===
+----- ORDER BOOK -----
+BID 100.50 x 100
+No full top-of-book.
+================

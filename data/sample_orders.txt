@@ -1,0 +1,36 @@
+# Human-readable demo feed (supports CANCEL/MODIFY/id=/tif=)
+# Format:
+#   HH:MM:SS LIMIT BUY <px> <qty> [id=N] [tif=GTC|IOC|FOK|DAY]
+#   HH:MM:SS LIMIT SELL <px> <qty> [id=N] [tif=...]
+#   HH:MM:SS MARKET BUY <qty> [id=N]
+#   HH:MM:SS MARKET SELL <qty> [id=N]
+#   HH:MM:SS CANCEL id=N
+#   HH:MM:SS MODIFY id=N price=<px> qty=<qty>
+
+09:30:00 LIMIT BUY 100.50 100 id=1
+09:30:01 LIMIT SELL 101.00 50 id=2
+09:30:02 LIMIT SELL 101.20 60 id=3
+09:30:03 LIMIT BUY 100.80 80 id=4
+# Modify BUY #4 up to cross with best ask 101.00 → fills 50, rests 30 @ 101.00 (if not fully filled)
+09:30:04 MODIFY id=4 price=101.00 qty=80
+# New SELL crosses remaining bid @101.00 for 30, rest (10) becomes new ask at 100.90
+09:30:05 LIMIT SELL 100.90 40 id=5
+# MARKET BUY to take whatever is available on ask side
+09:30:06 MARKET BUY 70 id=6
+# IOC example (no cross at 100.60 if best bid < 100.60 → cancels immediately)
+09:30:07 LIMIT SELL 100.60 50 id=7 tif=IOC
+# FOK example (needs full quantity available at or better than 100.70)
+09:30:08 LIMIT BUY 100.70 200 id=8 tif=FOK
+# Cancel a resting bid
+09:30:09 CANCEL id=1
+# Lower an ask to tighten spread
+09:30:10 MODIFY id=3 price=100.70 qty=60
+# New crossing BUY: should consume ask@100.90 then ask@100.70
+09:30:11 LIMIT BUY 100.95 70 id=9
+# Add some depth on both sides
+09:30:12 LIMIT BUY 100.40 120 id=10
+09:30:13 LIMIT SELL 101.10 150 id=11
+# Small MARKET SELL to hit best bid
+09:30:14 MARKET SELL 25 id=12
+# Clean-up: cancel any remaining order (if still resting)
+09:30:15 CANCEL id=5

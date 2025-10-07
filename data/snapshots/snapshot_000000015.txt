@@ -1,0 +1,6 @@
+=== SNAPSHOT ===
+----- ORDER BOOK -----
+ASK 101.20 x 10
+BID 101.00 x 80
+BestBid 101.00 (80), BestAsk 101.20 (10) | Spread 0.20 | Mid 101.10
+================
